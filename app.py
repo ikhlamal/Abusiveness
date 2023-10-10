@@ -8,39 +8,39 @@ st.title("Deteksi Kalimat Abusive")
 # Input teks dari pengguna
 input_text = st.text_area("Masukkan teks:", "")
 
-# Tombol "Proses" untuk menghitung skor sentimen
+# Tombol "Proses" untuk menghitung skor abusiveness
 if st.button("Proses"):
     # Load model dari file pickle
-    with open('logistic_regression_model.pkl', 'rb') as model_file:
+    with open('model.pkl', 'rb') as model_file:
         model = pickle.load(model_file)
 
     # Load TF-IDF Vectorizer dari file pickle
     with open('tfidf_vectorizer.pkl', 'rb') as vectorizer_file:
         tfidf_vectorizer = pickle.load(vectorizer_file)
 
-    # Fungsi untuk menghitung skor sentimen
-    def predict_sentiment(text):
+    # Fungsi untuk menghitung skor abusiveness
+    def predict_abusiveness(text):
         # Transformasi teks input ke dalam representasi TF-IDF
         tfidf_text = tfidf_vectorizer.transform([text])
 
-        # Prediksi skor sentimen
-        sentiment_score = model.predict_proba(tfidf_text)[0]
+        # Prediksi skor abusiveness
+        abusiveness_score = model.predict_proba(tfidf_text)[0]
 
-        return sentiment_score
+        return abusiveness_score
 
-    # Tampilkan skor sentimen jika ada input teks dari pengguna
+    # Tampilkan skor abusiveness jika ada input teks dari pengguna
     if input_text:
-        sentiment_score = predict_sentiment(input_text)
+        abusiveness_score = predict_abusiveness(input_text)
 
         # Tampilkan skor sentimen
-        st.write("Skor Sentimen:")
-        st.write(f"Positif: {sentiment_score[0]:.2f}")
-        st.write(f"Negatif: {sentiment_score[1]:.2f}")
+        st.write("Skor abusiveness:")
+        st.write(f"Positif: {abusiveness_score[0]:.2f}")
+        st.write(f"Negatif: {abusiveness_score[1]:.2f}")
 
-        # Tambahkan peringatan berdasarkan skor sentimen
-        if sentiment_score[0] > sentiment_score[1]:
-            st.success("Teks ini memiliki sentimen POSITIF.")
-        elif sentiment_score[0] < sentiment_score[1]:
-            st.warning("Teks ini memiliki sentimen NEGATIF.")
+        # Tambahkan peringatan berdasarkan skor abusiveness
+        if abusiveness_score[0] > abusiveness_score[1]:
+            st.success("Kalimat ini TIDAK ABUSIVE.")
+        elif abusiveness_score[0] < abusiveness_score[1]:
+            st.warning("Kalimat ini ABUSIVE.")
         else:
-            st.info("Teks ini memiliki sentimen NETRAL.")
+            st.info("Kalimat ini NETRAL.")
