@@ -9,11 +9,11 @@ st.title("Deteksi Sentimen")
 input_text = st.text_area("Masukkan teks:", "")
 
 # Load model dari file pickle
-with open('model.pkl', 'rb') as model_file:
+with open('logistic_regression_model.pkl', 'rb') as model_file:
     model = pickle.load(model_file)
 
 # Load TF-IDF Vectorizer dari file pickle
-with open('vectorizer.pkl', 'rb') as vectorizer_file:
+with open('tfidf_vectorizer.pkl', 'rb') as vectorizer_file:
     tfidf_vectorizer = pickle.load(vectorizer_file)
 
 # Fungsi untuk menghitung skor sentimen
