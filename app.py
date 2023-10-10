@@ -34,6 +34,7 @@ if st.button("Proses"):
 
         # Tampilkan skor sentimen
         st.write("Skor abusiveness:")
+        st.write(f"yes: {abusiveness_score:.2f}")
         st.write(f"Positif: {abusiveness_score[0]:.2f}")
         st.write(f"Negatif: {abusiveness_score[1]:.2f}")
 
