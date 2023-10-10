@@ -3,7 +3,7 @@ import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Judul aplikasi
-st.title("Deteksi Sentimen")
+st.title("Deteksi Kalimat Abusive")
 
 # Input teks dari pengguna
 input_text = st.text_area("Masukkan teks:", "")
@@ -34,3 +34,11 @@ if input_text:
     st.write("Skor Sentimen:")
     st.write(f"Positif: {sentiment_score[0]:.2f}")
     st.write(f"Negatif: {sentiment_score[1]:.2f}")
+
+    # Tambahkan peringatan berdasarkan skor sentimen
+    if sentiment_score[0] > sentiment_score[1]:
+        st.success("Teks ini memiliki sentimen POSITIF.")
+    elif sentiment_score[0] < sentiment_score[1]:
+        st.warning("Teks ini memiliki sentimen NEGATIF.")
+    else:
+        st.info("Teks ini memiliki sentimen NETRAL.")
