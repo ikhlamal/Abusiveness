@@ -1,35 +1,36 @@
 import streamlit as st
 import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Load vectorizer and model from pickle files
-with open('tfidf_vectorizer.pkl', 'rb') as vectorizer_file:
+# Judul aplikasi
+st.title("Deteksi Sentimen")
+
+# Input teks dari pengguna
+input_text = st.text_area("Masukkan teks:", "")
+
+# Load model dari file pickle
+with open('model.pkl', 'rb') as model_file:
+    model = pickle.load(model_file)
+
+# Load TF-IDF Vectorizer dari file pickle
+with open('vectorizer.pkl', 'rb') as vectorizer_file:
     tfidf_vectorizer = pickle.load(vectorizer_file)
 
-with open('logistic_regression_model.pkl', 'rb') as model_file:
-    logistic_regression = pickle.load(model_file)
+# Fungsi untuk menghitung skor sentimen
+def predict_sentiment(text):
+    # Transformasi teks input ke dalam representasi TF-IDF
+    tfidf_text = tfidf_vectorizer.transform([text])
 
-# Streamlit UI
-st.title('Abusiveness Detection')
+    # Prediksi skor sentimen
+    sentiment_score = model.predict_proba(tfidf_text)[0]
 
-# Input text from the user
-user_input = st.text_input('Input a sentence:')
-if user_input:
-    # Preprocess and transform user input
-    user_input_tfidf = tfidf_vectorizer.transform([user_input])
+    return sentiment_score
 
-    # Predict the abusiveness level
-    prediction = logistic_regression.predict(user_input_tfidf)[0]
+# Tampilkan skor sentimen jika ada input teks dari pengguna
+if input_text:
+    sentiment_score = predict_sentiment(input_text)
 
-    # Output the result
-    st.write('Input Sentence:', user_input)
-    if prediction == 0:
-        st.write('Prediction: Non-Abusive')
-    else:
-        st.write('Prediction: Abusive')
-
-st.write('Example:')
-example_text = "Lu ganteng tapi mukanya kek anjing."
-st.write('Input Sentence:', example_text)
-example_text_tfidf = tfidf_vectorizer.transform([example_text])
-example_prediction = logistic_regression.predict(example_text_tfidf)[0]
-st.write('Prediction:', 'Abusive' if example_prediction == 1 else 'Non-Abusive')
+    # Tampilkan skor sentimen
+    st.write("Skor Sentimen:")
+    st.write(f"Positif: {sentiment_score[1]:.2f}")
+    st.write(f"Negatif: {sentiment_score[0]:.2f}")
