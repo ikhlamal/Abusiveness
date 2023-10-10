@@ -32,5 +32,5 @@ if input_text:
 
     # Tampilkan skor sentimen
     st.write("Skor Sentimen:")
-    st.write(f"Positif: {sentiment_score[1]:.2f}")
-    st.write(f"Negatif: {sentiment_score[0]:.2f}")
+    st.write(f"Positif: {sentiment_score[0]:.2f}")
+    st.write(f"Negatif: {sentiment_score[1]:.2f}")
